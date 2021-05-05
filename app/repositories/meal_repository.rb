@@ -10,8 +10,6 @@ class MealRepository < BaseRepository
     end
   end
 
-
-
   def build_element_from_row(row)
     row[:id] = row[:id].to_i
     row[:price] = row[:price].to_i

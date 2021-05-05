@@ -1,48 +1,22 @@
 require 'csv'
 require_relative '../models/employee'
+require_relative 'base_repository'
 
-class EmployeeRepository
-  def initialize(csv_file)
-    @csv_file = csv_file
-    @employees = []
-    @next_id = 1
-    load_csv if File.exist?(@csv_file)
-  end
-
-  def load_csv
-    csv_options = { headers: :first_row, header_converters: :symbol }
-    CSV.foreach(@csv_file, csv_options) do |row|
-      row[:id] = row[:id].to_i
-      @employees << Employee.new(row)
-    end
-    @next_id = @employees.empty? ? 1 : @employees.last.id + 1
-  end
-
-  def all
-    @employees
-  end
-
-  def create(employee)
-    employee.id = @next_id
-    @employees << employee
-    @next_id += 1
-    save_csv
-  end
+class EmployeeRepository < BaseRepository
 
   def find_by_username(username)
-    @employees.find { |employee| employee.username == username }
+    @elements.find { |employee| employee.username == username }
   end
 
-  def find(id)
-    @employees.find { |employee| employee.id == id }
+  def build_element_from_row(row)
+    row[:id] = row[:id].to_i
+    Employee.new(row)
   end
 
-  def save_csv
-    CSV.open(@csv_file, "wb") do |csv|
-      csv << ["id","username","password","role"]
-      @employees.each do |employee|
-        csv << [employee.id, employee.username, employee.password, employee.role]
-      end
+  def fill_csv(csv)
+    csv << ["id","username","password","role"]
+    @elements.each do |element|
+      csv << [element.id, element.username, element.password, element.role]
     end
   end
 end
