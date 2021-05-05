@@ -15,5 +15,9 @@ class View
     puts "Please enter your #{thing}"
     gets.chomp
   end
+
+  def error
+    puts "I'm afraid those credentials did not match, please try again"
+  end
 end
 
