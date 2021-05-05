@@ -6,6 +6,20 @@ class BaseRepository
     load_csv if File.exist?(@csv_file)
   end
 
+  def load_csv
+    csv_options = { headers: :first_row, header_converters: :symbol }
+    CSV.foreach(@csv_file, csv_options) do |row|
+      @elements << build_element_from_row(row)
+    end
+    @next_id = @elements.empty? ? 1 : @elements.last.id + 1
+  end
+
+  def save_csv
+    CSV.open(@csv_file, "wb") do |csv|
+      fill_csv(csv)
+    end
+  end
+
   def all
     @elements
   end
