@@ -3,6 +3,7 @@ require_relative '../models/customer'
 require_relative 'base_repository'
 
 class CustomerRepository < BaseRepository
+
   def build_element_from_row(row)
     row[:id] = row[:id].to_i
     Customer.new(row)
@@ -14,6 +15,7 @@ class CustomerRepository < BaseRepository
       csv << [element.id, element.name, element.address]
     end
   end
+
 end
 
 

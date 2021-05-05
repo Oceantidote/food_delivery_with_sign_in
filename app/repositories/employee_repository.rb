@@ -13,6 +13,10 @@ class EmployeeRepository < BaseRepository
     Employee.new(row)
   end
 
+  def delivery_guys
+    @elements.select { |employee| employee.delivery_guy? }
+  end
+
   def fill_csv(csv)
     csv << ["id","username","password","role"]
     @elements.each do |element|
